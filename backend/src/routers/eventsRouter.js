@@ -10,10 +10,14 @@ import {
   updateEvent,
 } from "../controllers/eventsController.js";
 import { requireRole } from "../middlewares/requireRole.js";
+import { upload } from "../middlewares/upload.js";
 
 const router = express.Router();
 
-router.route("/").get(getAllEvents).post(createEvent);
+router
+  .route("/")
+  .get(getAllEvents)
+  .post(requireRole("ADMIN"), upload.single("image"), createEvent);
 router
   .route("/:eventId")
   .get(getEventDetails)
