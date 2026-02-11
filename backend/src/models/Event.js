@@ -2,29 +2,41 @@ import mongoose from "mongoose";
 
 const eventSchema = new mongoose.Schema(
   {
-    name: {
-      type: String,
-      required: true,
+    name: { type: String, required: true },
+
+    description: { type: String, required: true },
+
+    bannerImageUrl: { type: String },
+
+    startTime: { type: Date, required: true },
+    endTime: { type: Date, required: true },
+
+    registrationDeadline: { type: Date, required: true },
+
+    venue: { type: String, required: true },
+
+    teamSize: {
+      min: { type: Number, default: 1 },
+      max: { type: Number, default: 1 },
     },
-    description: {
-      type: String,
-      required: true,
-    },
-    bannerImageUrl: {
-      type: String,
-    },
-    startTime: {
-      type: Date,
-      required: true,
-    },
-    endTime: {
-      type: Date,
-      required: true,
-    },
-    maxParticipants: {
+
+    entryFee: {
       type: Number,
-      required: true,
+      default: 0,
     },
+
+    maxParticipants: { type: Number, required: true },
+
+    prizes: [
+      {
+        position: String,
+        amount: Number,
+        perks: String,
+      },
+    ],
+
+    rules: [String],
+
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

@@ -2,10 +2,12 @@ import express from "express";
 import dotenv from "dotenv";
 import connectToDB from "./config/db.js";
 import authRouter from "./routers/authRouter.js";
+import uploadsRouter from "./routers/uploadsRouter.js";
 import eventRouter from "./routers/eventsRouter.js";
 import volunteeringRouter from "./routers/VolunteeringRouter.js";
 import participationsRouter from "./routers/participationsRouter.js";
 import { requireAuth } from "./middlewares/requireAuth.js";
+import { errorMiddleware } from "./middlewares/errorMiddleware.js";
 
 dotenv.config();
 
@@ -14,6 +16,7 @@ const app = express();
 app.use(express.json());
 
 app.use("/auth", authRouter);
+app.use("/uploads", requireAuth, uploadsRouter);
 app.use("/events", requireAuth, eventRouter);
 app.use("/volunteering", requireAuth, volunteeringRouter);
 app.use("/participations", requireAuth, participationsRouter);
@@ -21,6 +24,8 @@ app.use("/participations", requireAuth, participationsRouter);
 app.get("/", (req, res) => {
   res.status(200).json({ data: "hello world!" });
 });
+
+app.use(errorMiddleware);
 
 const port = process.env.PORT || 5000;
 
